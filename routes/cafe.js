@@ -1,6 +1,6 @@
 import express from "express";
 import pkg from "../generated/prisma/index.js";
-import { authMiddleware } from "../middleware/authmiddleware.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const { PrismaClient } = pkg;
 const prisma = new PrismaClient();
