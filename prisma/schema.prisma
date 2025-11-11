@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  CAFE_OWNER
+}
+
+enum OrderStatus {
+  PENDING
+  PREPARING
+  READY
+  DELIVERED
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String     @unique
+  password  String
+  role      Role       @default(CUSTOMER)
+  foods     Food[] // if CAFE_OWNER
+  orders    Order[] // if CUSTOMER
+  cart      CartItem[]
+  imageUrl  String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // Ratings
+  ratingsGiven    Rating[] @relation("UserRatings") // ratings this user gave
+  ratingsReceived Rating[] @relation("CafeRatings") // ratings this user received as cafe owner
+
+  // Favorites
+  favoritesGiven  Favorite[] @relation("UserFavorites")
+  favoritesReceived Favorite[] @relation("CafeFavorites")
+}
+
+
+model Food {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  imageUrl    String?
+  owner       User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId     Int
+  orders      OrderItem[]
+  cart        CartItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  total     Float
+  status    OrderStatus @default(PENDING)
+  student   User        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId Int
+  items     OrderItem[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model OrderItem {
+  id       Int   @id @default(autoincrement())
+  food     Food  @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  foodId   Int
+  order    Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId  Int
+  quantity Int
+  price    Float
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  student   User     @relation(fields: [studentId], references: [id])
+  studentId Int
+  food      Food     @relation(fields: [foodId], references: [id])
+  foodId    Int
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Rating {
+  id        Int      @id @default(autoincrement())
+  value     Int // rating value (1–5)
+  comment   String? // optional review comment
+  userId    Int
+  cafeId    Int
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation("UserRatings", fields: [userId], references: [id])
+  cafe User @relation("CafeRatings", fields: [cafeId], references: [id])
+}
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation("UserFavorites", fields: [userId], references: [id])
+  userId    Int
+  cafe      User     @relation("CafeFavorites", fields: [cafeId], references: [id])
+  cafeId    Int
+  createdAt DateTime @default(now())
+
+  @@unique([userId, cafeId]) // prevents duplicate favorites
+}
+
+
+

@@ -1,0 +1,76 @@
+### Signup as Customer
+POST http://localhost:5000/api/signup
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "testuser@example.com",
+  "password": "123456",
+  "role": "CUSTOMER"
+}
+
+###
+
+### Signup as Cafe Owner
+POST http://localhost:5000/api/signup
+Content-Type: application/json
+
+{
+  "name": "Cafe Owner",
+  "email": "ownerr@example.com",
+  "password": "123456",
+  "role": "CAFE_OWNER"
+}
+###
+POST http://localhost:5000/api/signup
+Content-Type: application/json
+
+{
+  "name": "canoe",
+  "email": "canoe@example.com",
+  "password": "123456",
+  "role": "CAFE_OWNER"
+}
+###
+POST http://localhost:5000/api/login
+Content-Type: application/json
+
+{
+  "email": "canoe@example.com",
+  "password": "123456"
+}
+###
+ 
+POST http://localhost:5000/api/login
+Content-Type: application/json
+
+{
+ "email": "testuser@example.com",
+  "password": "123456"
+}
+###
+POST http://localhost:5000/api/food/create
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJDVVNUT01FUiIsImlhdCI6MTc2MTYzNzkxNiwiZXhwIjoxNzYyMjQyNzE2fQ.1iPKE9lGbUptfwaiMy-8bIIJl-cR4xsuT3pla84ORds
+Content-Type: application/json
+
+{
+  "name": "dnch frfr",
+  "description": "dnch ena frfr",
+  "price": 88.99,
+  "imageUrl": "https://example.com/burger.jpg"
+}
+###
+POST http://localhost:5000/api/cart/add
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsInJvbGUiOiJDQUZFX09XTkVSIiwiaWF0IjoxNzYxNjM0NjAxLCJleHAiOjE3NjIyMzk0MDF9.ovn84Go9sEFA3taHYUCUWay2jAJNVYSyQmXcwNA2j78
+Content-Type: application/json
+
+{
+  "foodId": 1,
+  "quantity": 1
+}
+###
+GET http://localhost:5000/api/favorites
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsInJvbGUiOiJDQUZFX09XTkVSIiwiaWF0IjoxNzYxNjM0NjAxLCJleHAiOjE3NjIyMzk0MDF9.ovn84Go9sEFA3taHYUCUWay2jAJNVYSyQmXcwNA2j78
+
+
+
